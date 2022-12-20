@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="orders">
+	
+	<select id="getListData" parameterType="String" resultType="orderListDto">
+		SELECT code, orderer, order_price, order_addr, regdate, reservation_date,
+				request, state, get_invoice_num, send_invoice_num
+		FROM service_order
+		WHERE orderer=#{id}
+		ORDER BY code DESC
+	</select>
+	
+   <select id="getdata" parameterType="int" resultType="orderListDto"  >
+     	SELECT num, o.code, o.inum, count, s.oder_price, s.regdate
+     		   s.reservation_date, s.request, s.state, s.get_invoice_num, s.send_invoice_num,
+     		   i.item, i.price
+     	FROM order_items o, service_order s, items i
+     	WHERE o.code=#{code} AND o.code=s.code AND o.inum=i.inum
+   </select>
+</mapper>

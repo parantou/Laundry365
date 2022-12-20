@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="qnaReply">
+	<select id="getList" parameterType="qnaReplyDto" resultType="qnaReplyDto">
+		SELECT rnum, ref_num, writer, content, 
+					 reply_board.regdate
+				FROM reply_board
+				INNER JOIN users
+				ON reply_board.writer=users.id
+				WHERE ref_num=#{ref_num}
+				ORDER BY ref_num ASC, rnum ASC
+	</select>
+	<update id="delete" parameterType="int">
+		DELETE FROM reply_board
+		WHERE rnum=#{rnum}
+	</update>
+	<insert id="insert" parameterType="qnaReplyDto">
+		INSERT INTO reply_board
+		(rnum, ref_num, writer, content, regdate)
+		VALUES(#{rnum},#{ref_num}, #{writer}, #{content}, 
+			 SYSDATE)
+	</insert>
+	<select id="getSequence" resultType="int">
+		SELECT reply_seq.NEXTVAL
+		FROM DUAL
+	</select>
+	<update id="update" parameterType="qnaReplyDto">
+		UPDATE reply_board
+		SET content=#{content},update_date=SYSDATE
+		WHERE ref_num=#{ref_num} AND writer=#{writer}
+	</update>
+	<select id="getData" parameterType="int" resultType="qnaReplyDto">
+		SELECT rnum,writer,content,ref_num,regdate
+		FROM reply_board
+		WHERE rnum=#{rnum}
+	</select>
+	<select id="getDataReply" parameterType="int" resultType="qnaReplyDto">
+		SELECT rnum,writer,content,ref_num,regdate
+		FROM reply_board
+		WHERE ref_num=#{num}
+	</select>
+</mapper>

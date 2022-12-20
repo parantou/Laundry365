@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="review">
+	<sql id="searchCondition">
+		<choose>
+			<when test="title != null and content != null">
+				WHERE title LIKE '%'||#{title}||'%' 
+				OR content LIKE '%'||#{content}||'%'
+			</when>
+			<when test="title != null">
+				WHERE title LIKE '%'||#{title}||'%'
+			</when>
+			<when test="writer != null">
+				WHERE writer LIKE '%'||#{writer}||'%'
+			</when>
+		</choose>
+	</sql>
+
+	<select id="getList" parameterType="kjReviewDto" resultType="kjReviewDto">
+		SELECT *
+		FROM
+			(SELECT result1.*, ROWNUM AS rnum
+			FROM
+				(SELECT num,writer,title,content,viewCount,TO_CHAR(regdate,'YY.MM.DD') AS regdate ,star
+				FROM review_board
+				<include refid="searchCondition"/>
+				ORDER BY num DESC) result1)
+		<![CDATA[ 
+		WHERE rnum >= #{startRowNum} AND rnum <= #{endRowNum}
+		]]>
+		
+		<![CDATA[]]>
+	</select>
+	
+	<select id="getCount" parameterType="kjReviewDto" resultType="int">
+		SELECT NVL(MAX(ROWNUM), 0)
+		FROM review_board
+		<include refid="searchCondition"/>
+	</select>	
+	
+	<insert id="insert" parameterType="kjReviewDto">
+		INSERT INTO review_board
+		(num,writer,title,content,viewcount,regdate,star,code)
+		VALUES(review_board_seq.NEXTVAL, #{writer}, #{title},
+			#{content}, #{viewCount}, SYSDATE,#{star},#{code})
+	</insert>
+	
+	<select id="getData" parameterType="int" resultType="kjReviewDto">
+		SELECT result1.*
+		FROM
+			(SELECT num,writer,title,content,viewCount,star,
+				TO_CHAR(regdate,'YY.MM.DD') AS regdate,
+				LAG(num,1,0) OVER (ORDER BY num DESC) AS prevNum,
+				LEAD(num,1,0) OVER (ORDER BY num DESC) AS nextNum
+			FROM review_board) result1
+		WHERE num=#{num}
+			
+	</select>
+	
+	<select id="getData2" parameterType="kjReviewDto" resultType="kjReviewDto">
+		SELECT result1.*
+		FROM
+			(SELECT num,writer,title,content,viewCount,star,
+				TO_CHAR(regdate,'YY.MM.DD') AS regdate,
+				LAG(num,1,0) OVER (ORDER BY num DESC) AS prevNum,
+				LEAD(num,1,0) OVER (ORDER BY num DESC) AS nextNum 
+			FROM review_board
+			<include refid="searchCondition"/>
+			) result1
+		WHERE num=#{num}	
+	</select>
+	
+	<update id="addViewCount" parameterType="int">
+		UPDATE review_board
+		SET viewCount=viewCount+1
+		WHERE num=#{num}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM review_board
+		WHERE num=#{num}
+	</delete>
+	
+	<update id="update" parameterType="kjReviewDto">
+		UPDATE review_board
+		SET title=#{title}, content=#{content} , star=#{star}
+		WHERE num=#{num}
+	</update>
+</mapper>

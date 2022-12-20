@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Reserve">
+	<select id="getList" resultType="com.acorn.boram.reserve.dto.ItemsDto">
+		SELECT inum, item, price, category
+		FROM items
+		JOIN categorize USING(category)
+		WHERE category = 'clothes'
+	</select>
+	<select id="getList2" resultType="com.acorn.boram.reserve.dto.ItemsDto">
+		SELECT inum, item, price, category
+		FROM items
+		JOIN categorize USING(category)
+		WHERE category = 'bedding'
+	</select>
+	<select id="getList3" resultType="com.acorn.boram.reserve.dto.ItemsDto">
+		SELECT inum, item, price, category
+		FROM items
+		JOIN categorize USING(category)
+		WHERE category = 'shoes'
+	</select>
+	<select id="getList4" resultType="com.acorn.boram.reserve.dto.ItemsDto">
+		SELECT inum, item, price, category
+		FROM items
+		JOIN categorize USING(category)
+		WHERE category = 'living'
+	</select>
+	<select id="productAddr" parameterType="String" resultType="usersDto">
+		SELECT id,name,pwd,email,countryCode,phone,addr,profile,TO_CHAR(regdate,'YYYY-MM-DD') regdate,manager
+		FROM users
+		WHERE id=#{id}
+	</select>
+	
+	<select id="getData2" parameterType="int" resultType="com.acorn.boram.reserve.dto.Order_ItemsDto">
+		SELECT code, inum, count FROM order_items
+		WHERE num=#{num}
+	</select>
+	<insert id="insert1" parameterType="com.acorn.boram.reserve.dto.Order_ItemsDto">
+		INSERT INTO order_items
+		(num, code, inum, count)
+		VALUES(order_items.NEXTVAL, #{code}, #{inum}, #{count})
+	</insert>
+	<select id="getData3" parameterType="int" resultType="com.acorn.boram.reserve.dto.CategorizeDto">
+		SELECT category FROM categorize
+		WHERE num=#{num}
+	</select>
+	<insert id="insert2" parameterType="com.acorn.boram.reserve.dto.Service_OrderDto">
+		INSERT ALL
+			INTO service_order VALUES(service_order_seq.NEXTVAL, #{orderer}, #{category}, #{order_price}, SYSDATE, #{reservation_date}, #{request}, #{get_invoice_num}, #{send_invoice_num})
+			INTO order_items VALUES(order_items_seq.NEXTVAL, #{code}, #{inum}, #{count})
+	</insert>
+	<select id="getData4" resultType="com.acorn.boram.reserve.dto.Service_OrderDto">
+		SELECT code, orderer, category, order_price, regdate, reservation_date, request, get_invoice_num, send_invoice_num FROM service_order
+		WHERE num=#{num}
+	</select>
+	<insert id="productInsert" parameterType="com.acorn.boram.reserve.dto.Service_OrderDto">
+		INSERT INTO service_order(code, orderer, category, order_price, order_addr, regdate, reservation_date, request, state get_invoice_num, send_invoice_num)
+		VALUES(service_order_seq.NEXTVAL, #{orderer}, #{category}, #{order_price}, #{order_addr}, SYSDATE, #{reservation_date}, #{request}, #{state} #{get_invoice_num}, #{send_invoice_num})
+	</insert>
+	<insert id="productCountInsert" parameterType="com.acorn.boram.reserve.dto.Order_ItemsDto">
+		INSERT INTO order_items(num, code, inum, count)
+		VALUES(order_items_seq.NEXTVAL, #{code}, #{inum}, #{count})
+	</insert>
+	
+	<!-- 주문 내역 insert -->
+	<insert id="insertOrder" parameterType="service_orderDto">
+		INSERT INTO service_order(code, orderer, category, order_price, 
+								order_addr, regdate, reservation_date, request, state)
+		VALUES(service_order_seq.NEXTVAL, #{orderer}, #{category}, #{order_price}, #{order_addr}, SYSDATE, #{reservation_date}, #{request}, '예약완료')
+	</insert>
+	<!-- servie_order의 현재 seq 가져오기 -->
+	<select id="getSeq" resultType="int">
+		SELECT service_order_seq.CURRVAL
+		FROM DUAL
+	</select>
+	<!-- 주문상품 order_items에 넣기 -->
+	<insert id="insertOrderItems" parameterType="order_itemsDto">
+		INSERT INTO order_items(num,code,inum,count)
+		VALUES(order_items_seq.NEXTVAL, #{code}, #{inum}, #{count})
+	</insert>
+</mapper>

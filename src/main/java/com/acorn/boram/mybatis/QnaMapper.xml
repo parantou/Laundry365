@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="qna">
+
+	
+	<select id="getList" parameterType="qnaDto" resultType="qnaDto">
+		SELECT *
+		FROM
+			(SELECT result1.*, ROWNUM AS rnum
+			FROM
+				(SELECT num,writer,title,content,regdate,check_reply
+				FROM qna_board
+				ORDER BY num DESC) result1)
+		<![CDATA[ 
+		WHERE rnum >= #{startRowNum} AND rnum <= #{endRowNum}
+		]]>
+	</select>
+	<select id="getCount" parameterType="qnaDto" resultType="int">
+		SELECT NVL(MAX(ROWNUM), 0)
+		FROM qna_board	
+	</select>
+	<insert id="insert" parameterType="qnaDto">
+		INSERT INTO qna_board
+		(num, writer, title, content, regdate, check_reply)
+		VALUES(qna_seq.NEXTVAL, #{writer}, #{title}, #{content}
+			, SYSDATE, #{check_reply})
+	</insert>
+	<select id="getData" parameterType="int" resultType="qnaDto">		
+		SELECT result1.*
+		FROM
+			(SELECT num,writer,title,content,
+				TO_CHAR(regdate,'YY.MM.DD HH24:MI') AS regdate,
+				LAG(num,1,0) OVER (ORDER BY num DESC) AS prevNum,
+				LEAD(num,1,0) OVER (ORDER BY num DESC) AS nextNum,
+				check_reply
+			FROM qna_board
+			) result1
+		WHERE num=#{num}
+	</select>
+	<delete id="delete" parameterType="int">
+		DELETE FROM qna_board
+		WHERE num=#{num}
+	</delete>
+	<update id="updateCheckReply" parameterType="int">
+		UPDATE qna_board
+		SET check_reply=
+			(SELECT COUNT(*) 
+			FROM reply_board 
+			WHERE ref_num = #{ref_num})
+		WHERE num=#{num}
+	</update>
+</mapper>

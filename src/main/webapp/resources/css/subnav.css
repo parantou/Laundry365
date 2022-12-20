@@ -1,0 +1,101 @@
+@charset "UTF-8";
+
+#subnav{
+	position:relative;
+}
+#image-box{
+	width: 100%;
+	height: 400px;
+	overflow: hidden;
+	margin: 0;
+}
+#image-thumbnail{
+	width: 100%;
+	height: 100%;
+	object-fit:cover;
+}
+#sub-text{
+	position: absolute;
+	text-align: center;
+	top: 65%;
+	left: 50%;
+	transform: translate( -50%, -65% );
+}
+#subTitle{
+	font-size:50px;
+	color:#ffffff;
+	margin-bottom:5px;
+	font-weight: 700;
+}
+#subContent{
+	font-size:22px;
+	color:#ffffff;
+}
+
+/* main 메뉴바  position 변경 */
+.navbar1{
+	position: absolute;
+}
+
+/* sub 메뉴바 관련 css*/
+#subNavbar{
+	height: 70px;
+	width: 100%;
+	display:flex; align-items:center; justify-content:center;
+	border-bottom: 1px solid #ebebeb;
+	background-color: white;
+}
+
+#subNavbarNav{
+
+	text-align: center;
+	height:100%;
+}
+
+#subNavUl{
+	display: flex;
+	list-style:none;
+		height:100%;
+}
+
+.subNavItem a{
+	font-size: 17px;
+	color:#505050;
+	text-decoration: none;
+	margin:20px 30px 20px 0px;
+	display: inherit;
+	width:100%;
+}
+.subNavItem a:lastchild{margin-right:0px;}
+
+.subNavItem a.active{
+	font-size:17px;
+	font-weight:800;
+	color:#000000;
+}
+
+.deco{
+	border-bottom: 2.5px solid black;
+}
+
+/* 서브 메뉴명 텍스트 관련*/
+#subMenuText{
+	height: 240px;
+	position:relative;
+}
+
+#subMenuText p{
+	position: absolute;
+	text-align: center;
+	top: 50%;
+	left: 50%;
+	transform: translate( -50%, -50% );
+	font-size: 35px;
+	font-weight: 600;
+	color:#000000;
+}
+
+@media (max-width: 580px) {
+	#subTitle {font-size:47px;}
+	#subContent {font-size:20px;}
+}

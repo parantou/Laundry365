@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ <configuration>
+ 	<typeAliases>
+ 		<typeAlias type="com.acorn.boram.qna.dto.HyrQnaDto" alias="qnaDto"/>
+ 		<typeAlias type="com.acorn.boram.qna.dto.HyrQnaReplyDto" alias="qnaReplyDto"/>
+ 		<typeAlias type="com.acorn.boram.faq.dto.HyrFaqDto" alias="faqDto"/>
+ 		<typeAlias type="com.acorn.boram.review.dto.KjReviewDto" alias="kjReviewDto"/>
+		<typeAlias type="com.acorn.boram.users.dto.LsgUsersDto" alias="usersDto"/>
+		<typeAlias type="com.acorn.boram.orderlist.dto.LsaOrderListDto" alias="ordersDto"/>
+		<typeAlias type="com.acorn.boram.guide.dto.LsgItemsDto" alias="itemsDto"/>
+		<typeAlias type="com.acorn.boram.orderlist.dto.LsgOrderListDto" alias="orderListDto"/>
+		<typeAlias type="com.acorn.boram.notice.dto.NoticeDto" alias="noticeDto"/>
+		<typeAlias type="com.acorn.boram.notice.dto.NoticeCommentDto" alias="noticeCommentDto"/>
+		<typeAlias type="com.acorn.boram.orderlist.dto.LsgOrderItemsDto" alias="orderItemsDto"/>
+		<typeAlias type="com.acorn.boram.reserve.dto.Service_OrderDto" alias="service_orderDto"/>
+		<typeAlias type="com.acorn.boram.reserve.dto.Order_ItemsDto" alias="order_itemsDto"/>
+ 	</typeAliases>
+ 	<mappers>
+		<mapper resource="com/acorn/boram/mybatis/QnaMapper.xml"/>
+		<mapper resource="com/acorn/boram/mybatis/QnaReplyMapper.xml"/>
+		<mapper resource="com/acorn/boram/mybatis/FaqMapper.xml"/>
+		<mapper resource="com/acorn/boram/mybatis/ReviewMapper.xml"/>
+		<mapper resource="com/acorn/boram/mybatis/UsersMapper.xml"/>
+		<mapper resource="com/acorn/boram/mybatis/LsaOrderListMapper.xml"/>
+		<mapper resource="com/acorn/boram/mybatis/ItemsMapper.xml"/>
+		<mapper resource="com/acorn/boram/mybatis/OrderListMapper.xml"/>
+		<mapper resource="com/acorn/boram/mybatis/NoticeMapper.xml"/>
+		<mapper resource="com/acorn/boram/mybatis/NoticeCommentMapper.xml"/>
+		<mapper resource="com/acorn/boram/mybatis/ReserveMapper.xml"/>
+ 	</mappers>
+ </configuration>

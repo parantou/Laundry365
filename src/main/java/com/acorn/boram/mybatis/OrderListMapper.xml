@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="orderList">
+	<!-- 주문 내역 전체 검색하기 -->
+	<select id="getList" parameterType="orderListDto" resultType="orderListDto">
+		SELECT *
+		FROM
+			(SELECT result1.*, ROWNUM AS rnum
+			 FROM
+				(SELECT code, orderer, order_price, order_addr, s.regdate, reservation_date,
+						request, state, get_invoice_num, send_invoice_num, get_courier, send_courier,
+						name, phone, addr
+				 FROM service_order s
+				 INNER JOIN users ON orderer=users.id
+				 <choose>
+				 	<when test="code != 0 and state == null">
+						WHERE code LIKE '%'||#{code}||'%'
+					</when>
+					<when test="code != 0 and state != null">
+						WHERE code LIKE '%'||#{code}||'%'
+						AND state=#{state}
+					</when>
+					<when test="orderer != null and name != null and state == null">
+						WHERE orderer LIKE '%'||#{orderer}||'%'
+						OR name LIKE '%'||#{name}||'%'
+					</when>
+					<when test="orderer != null and name != null and state != null">
+						WHERE (orderer LIKE '%'||#{orderer}||'%'
+						OR name LIKE '%'||#{name}||'%')
+						AND state=#{state}
+					</when>
+					<when test="state !=null">
+						WHERE state=#{state}
+					</when>
+				</choose>
+				ORDER BY code DESC) result1)
+		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}		 
+	</select>
+	<!-- 주문 내역 총 숫자 검색 -->
+	<select id="getCount" parameterType="orderListDto" resultType="int">
+		SELECT NVL(MAX(ROWNUM), 0)
+		FROM service_order
+		INNER JOIN users ON orderer=users.id
+		<choose>
+		 	<when test="code != 0 and state == null">
+				WHERE code LIKE '%'||#{code}||'%'
+			</when>
+			<when test="code != 0 and state != null">
+				WHERE code LIKE '%'||#{code}||'%'
+				AND state=#{state}
+			</when>
+			<when test="orderer != null and name != null and state == null">
+				WHERE orderer LIKE '%'||#{orderer}||'%'
+				OR name LIKE '%'||#{name}||'%'
+			</when>
+			<when test="orderer != null and name != null and state != null">
+				WHERE (orderer LIKE '%'||#{orderer}||'%'
+				OR name LIKE '%'||#{name}||'%')
+				AND state=#{state}
+			</when>
+			<when test="state !=null">
+				WHERE state=#{state}
+			</when>
+		</choose>
+	</select>
+	<!-- 상제 주문내역 검색 -->
+	<select id="getData" parameterType="orderListDto" resultType="orderListDto">
+		SELECT code, orderer, order_price, order_addr, s.regdate, reservation_date,
+				request, state, get_invoice_num, send_invoice_num, get_courier, send_courier,
+				name, phone, addr
+		FROM service_order s
+		INNER JOIN users ON orderer=users.id
+		WHERE code=#{code}
+	</select>
+	
+	<!-- 주문번호에 맞는 주문 상품 검색 -->
+	<select id="getOrderItems" parameterType="orderListDto" resultType="orderItemsDto">
+		SELECT i.num,code,i.inum,count,item,price,category
+		FROM order_items i
+		INNER JOIN items ON i.inum=items.inum
+		WHERE code=#{code}
+	</select>
+	<!-- 주문 상태 변경하기 -->
+	<update id="orderUpdate" parameterType="orderListDto">
+		UPDATE service_order
+		SET state=#{state}
+		WHERE code=#{code}
+	</update> 
+	<!-- 수거용 송장번호 추가하기  -->
+	<update id="coruierUpdate" parameterType="orderListDto">
+		UPDATE service_order
+		SET get_courier=#{get_courier}, get_invoice_num=#{get_invoice_num}
+		WHERE code=#{code}
+	</update> 
+	<!-- 반환용 송장번호 추가하기  -->
+	<update id="coruierUpdate2" parameterType="orderListDto">
+		UPDATE service_order
+		SET send_courier=#{send_courier}, send_invoice_num=#{send_invoice_num}
+		WHERE code=#{code}
+	</update> 
+</mapper>

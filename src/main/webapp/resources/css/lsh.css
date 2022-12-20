@@ -1,0 +1,153 @@
+@charset "UTF-8";
+
+/*기본*/
+.mt_10 {margin-top:10px;}
+.mt_15 {margin-top:15px;}
+.mt_20 {margin-top:20px;}
+.mb_10 {margin-bottom:10px;}
+.mb_15 {margin-bottom:15px;}
+.mb_20 {margin-bottom:20px;}
+.mb_250{margin-bottom:250px;}
+
+
+
+table {width:100%; }
+.n-table {
+	border-collapse: collapse;
+	line-height:1.5;
+}
+table tr {
+	border:1px solid #ddd;
+	border-left: none;
+	border-right: none;
+}
+
+td {padding: 15px 0;}
+
+.imgtxt {font-size:13px; color:#999; margin-bottom:0 !important; margin-top:10px !important;}
+.upimgtxt {
+	font-size:13px;
+	color:#999;
+	margin-bottom:0 !important;
+	margin-top:10px !important;
+	text-align:center;
+}
+.lshbtn {
+	display:inline-block;
+	width:130px;
+	height:40px;
+	border:1px solid #dddddd;
+	text-decoration:none;
+	line-height:38px;
+	color:#000 !important;
+	text-align:center;
+	transition: all 0.5s;
+}
+.lshbtn:hover {
+	background-color:#000;
+	border:1px solid #000;
+	line-height:38px;
+	color:#fff !important;
+	transition: all 0.5s;
+}
+/*.lshbtncenter {margin:0 5px;}*/
+.lshbtnbox {
+	text-align:center;
+	margin-top:30px;
+}
+.lshimgbtn {
+	display:block;
+	width:80px;
+	height:30px;
+	border:1px solid #dddddd;
+	text-decoration:none;
+	line-height:30px;
+	color:#000 !important;
+	text-align:center !important;
+	transition: all 0.5s;
+	margin-top:20px !important;
+	cursor:pointer;
+}
+.lshimgbtn:hover {
+	background-color:#000;
+	border:1px solid #000;
+	color:#fff !important;
+	transition: all 0.5s;
+}
+
+button.lshbtn {
+	display:block;
+	width:130px;
+	height:40px;
+	border:1px solid #dddddd;
+	text-decoration:none;
+	line-height:38px;
+	background-color:#fff;
+	color:#000 !important;
+	text-align:center !important;
+	margin:0 auto !important;
+	transition: all 0.5s;
+	margin-top:30px !important;
+}
+button.lshbtn:hover {
+	background-color:#000;
+	border:1px solid #000;
+	line-height:38px;
+	color:#fff !important;
+	transition: all 0.5s;
+}
+
+
+button.pwdlshbtn {
+	display:inline-block;
+	width:130px;
+	height:40px;
+	border:1px solid #dddddd;
+	text-decoration:none;
+	line-height:38px;
+	background-color:#fff;
+	color:#000 !important;
+	text-align:center !important;
+	margin:0 auto !important;
+	transition: all 0.5s;
+	margin-top:30px !important;
+}
+button.pwdlshbtn:hover {
+	background-color:#000;
+	border:1px solid #000;
+	line-height:38px;
+	color:#fff !important;
+	transition: all 0.5s;
+}
+
+/*부트스트랩 폼컨트롤*/
+/*form-control*/
+.form-control {
+	display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #dddddd !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0 !important;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+
+
+
+
+
+
+
+
+
+
+

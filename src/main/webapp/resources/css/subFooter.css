@@ -1,0 +1,51 @@
+
+		/* 푸터 css */
+	footer{background-color: rgb(33, 33, 33, 0.998); height:240px;}
+	footer p{color :#fff;}
+	footer a{font-size:16px;}
+	footer a:hover{color:rgb(255, 255, 255, 0.8);}
+		.footer1{
+			border-bottom: 1px solid rgb(255, 255, 255, 0.25);
+			display: flex;
+			padding-top:50px;
+			padding-bottom:10px;
+		}
+		.footer1 a{
+			text-decoration: none;
+			color: #ffffff;
+			margin-right: 8px;
+			font-size:15px;
+		}
+		.footer1 p{font-size:16px;}
+		.footermain{
+			position: relative;
+			width: 100%;
+			margin-top: 10px;
+		}
+		.footer2{
+			position: absolute; top:0;
+		}
+		.footer3{
+			text-align: end;
+			padding-top:5px;
+		}
+		.footer3 p{font-size:15px;}
+		.all2{
+			font-size: 30px;
+		}
+		.footer_container{
+			width: 90%;
+			margin: 0 auto;
+		}
+
+		/* 푸터 수정 */
+		@media (max-width: 768px) {
+			.footer3 {
+				padding-top: 65px;
+				display: block;
+				text-align: left;
+			}
+			footer{height:303px;}
+		}
+			/* 푸터 수정 끝 */
+		/* 푸터 css  끝*/

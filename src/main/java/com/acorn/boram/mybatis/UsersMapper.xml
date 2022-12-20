@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="users">
+	<!-- 인자로 전달된 아이디와 일치하는 아디이가 존재하는지 검색 -->
+	<select id="isExist" parameterType="String" resultType="string">
+		SELECT id 
+		FROM users
+		WHERE id=#{inputId}
+	</select>
+	
+	<!-- (아이디 찾기/비밀번호찾기)인자로 전달된 정보와 일치하는 아이디가 존재하는지 검색 -->
+	<select id="isExistUser" parameterType="usersDto" resultType="usersDto">
+		SELECT id,name,email
+		FROM users
+		<choose>
+			<when test="id != null">
+				WHERE id=#{id} AND name=#{name} AND email=#{email}
+			</when>
+			<otherwise>
+				WHERE name=#{name} AND email=#{email}
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- 회원 비밀번호 변경 -->
+	<update id="updatePwd" parameterType="usersDto">
+		UPDATE users
+		SET pwd=#{pwd}
+		WHERE id=#{id}
+	</update>
+	
+	
+	<!-- 인자로 전달된 아이디에 해당하는 가입정보를 리턴해주는 메소드 -->
+	<select id="getData" parameterType="String" resultType="usersDto">
+		SELECT id,name,pwd,email,countryCode,phone,addr,profile,TO_CHAR(regdate,'YYYY-MM-DD') regdate,manager
+		FROM users
+		WHERE id=#{id}
+	</select>
+	
+	<!-- 회원 정보를 저장하는 메소드 -->
+	<insert id="insert" parameterType="usersDto">
+		INSERT INTO users(id,name,pwd,email,countryCode,phone,addr,regdate,manager)
+		VALUES(#{id}, #{name}, #{pwd}, #{email}, #{countryCode}, #{phone}, #{addr}, SYSDATE, 'N')
+	</insert>
+	
+	<!-- 모든 회원의 정보 가져오는 메소드 -->
+	<select id="getList" parameterType="usersDto" resultType="usersDto">
+		SELECT *
+		FROM
+			(SELECT result1.*, ROWNUM AS rnum
+			 FROM
+				(SELECT id,name,pwd,email,countryCode,phone,addr,
+				 		profile,TO_CHAR(regdate,'YYYY-MM-DD HH24:MI:SS') regdate,manager
+				 FROM users
+				 <choose>
+				 	<when test="id != null and manager == null">
+						WHERE id LIKE '%'||#{id}||'%'
+					</when>
+					<when test="id != null and manager != null">
+						WHERE id LIKE '%'||#{id}||'%'
+						AND manager=#{manager}
+					</when>
+				 	<when test="name != null and manager == null">
+						WHERE name LIKE '%'||#{name}||'%'
+					</when>
+					<when test="name != null and manager != null">
+						WHERE name LIKE '%'||#{name}||'%'
+						AND manager=#{manager}
+					</when>
+					<when test="manager !=null">
+						WHERE manager=#{manager}
+					</when>
+				</choose>
+				 ORDER BY name) result1)
+		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}	
+	</select>
+	
+	<!-- 회원 총 숫자 검색 -->
+	<select id="getCount" parameterType="usersDto" resultType="int">
+		SELECT NVL(MAX(ROWNUM), 0)
+		FROM users
+		<choose>
+		 	<when test="id != null and manager == null">
+				WHERE id LIKE '%'||#{id}||'%'
+			</when>
+			<when test="id != null and manager != null">
+				WHERE id LIKE '%'||#{id}||'%'
+				AND manager=#{manager}
+			</when>
+		 	<when test="name != null and manager == null">
+				WHERE name LIKE '%'||#{name}||'%'
+			</when>
+			<when test="name != null and manager != null">
+				WHERE name LIKE '%'||#{name}||'%'
+				AND manager=#{manager}
+			</when>
+			<when test="manager !=null">
+				WHERE manager=#{manager}
+			</when>
+		</choose>
+	</select>
+	
+	<!-- manager update -->
+	<update id="adminUpdate" parameterType="usersDto">
+		UPDATE users
+		SET manager=#{manager}
+		WHERE id=#{id}
+	</update>
+	
+	<!-- 이소현 추가 -->
+	<update id="pwdUpdate" parameterType="usersDto">
+		UPDATE users
+		SET pwd=#{newPwd }
+		WHERE id=#{id }
+	</update>
+	
+	<update id="update" parameterType="usersDto">
+		UPDATE users
+		SET email=#{email }, profile=#{profile }, phone=#{phone }, addr=#{addr }, countryCode=#{countryCode }
+		WHERE id=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="string">
+		DELETE FROM users
+		WHERE id=#{id}
+	</delete>
+</mapper>
